@@ -116,7 +116,7 @@
         <h2>Evaluación de Transformadores</h2>
 
         <div class="modo-contenedor" id="contenedorModo">
-            <span id="lblModoDesc">Método Clásico </span>
+            <span id="lblModoDesc">Método Clásico</span>
             <label class="switch">
                 <input type="checkbox" id="chkModo">
                 <span class="slider"></span>
@@ -332,7 +332,7 @@
             const esModoIEEE = chkModo.checked;
 
             // Actualizar estilo del switch
-            lblModoDesc.innerText = esModoIEEE ? "Norma Actual (IEEE 43-2000)" : "Método Clásico (Ing. Cuevas)";
+            lblModoDesc.innerText = esModoIEEE ? "Norma Actual (IEEE 43-2000)" : "Método Clásico";
             if (esModoIEEE) {
                 contenedorModo.classList.add('ieee-activo');
             } else {
