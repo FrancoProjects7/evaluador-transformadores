@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluación Dieléctrica de Transformadores</title>
     <style>
-        /* --- ESTILOS VISUALES (CSS) --- */
         :root {
             --primary-color: #3f51b5;
             --bg-color: #f5f5f5;
@@ -40,115 +39,85 @@
             margin-bottom: 24px;
         }
 
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #555;
-        }
-
-        .input-group input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input[type="number"]:focus {
-            border-color: var(--primary-color);
-        }
-
-        .radio-group {
-            margin: 24px 0;
-            padding: 16px;
-            background-color: #f9f9f9;
+        /* ESTILOS DEL SWITCH DE MODO */
+        .modo-contenedor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e3f2fd;
+            padding: 12px 16px;
             border-radius: 8px;
-            border: 1px solid #eee;
-        }
-
-        .radio-option {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .radio-option input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-
-        .radio-option label {
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .resultados-superiores {
             margin-bottom: 24px;
+            border: 1px solid #90caf9;
         }
 
-        .caja-resultado {
-            background-color: #e0e0e0;
-            min-height: 44px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            padding-left: 12px;
-            font-size: 18px;
+        .modo-contenedor span {
             font-weight: bold;
-        }
-
-        .divisor {
-            height: 2px;
-            background-color: var(--border-color);
-            margin: 24px 0;
-        }
-
-        .btn-calcular {
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 24px;
-        }
-
-        .btn-calcular:hover {
-            background-color: #303f9f;
-        }
-
-        .limite-item {
-            margin-bottom: 16px;
-        }
-
-        .limite-item label {
-            display: block;
             font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 4px;
+            color: #1565c0;
         }
 
-        .limite-valor {
-            font-size: 20px;
-            font-weight: bold;
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
         }
 
-        /* Colores específicos de alertas */
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #2196F3;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #555; }
+        .input-group input[type="number"] { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+
+        .radio-group { margin: 24px 0; padding: 16px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #eee; }
+        .radio-option { margin-bottom: 10px; display: flex; align-items: center; }
+        .radio-option input[type="radio"] { margin-right: 10px; transform: scale(1.2); cursor: pointer; }
+        .radio-option label { font-size: 15px; cursor: pointer; }
+
+        .resultados-superiores { margin-bottom: 24px; }
+        .caja-resultado { background-color: #e0e0e0; min-height: 44px; border-radius: 6px; margin-bottom: 10px; display: flex; align-items: center; padding-left: 12px; font-size: 18px; font-weight: bold; }
+        .divisor { height: 2px; background-color: var(--border-color); margin: 24px 0; }
+        
+        .btn-calcular { width: 100%; background-color: var(--primary-color); color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 24px; }
+        .btn-calcular:hover { background-color: #303f9f; }
+
+        .limite-item { margin-bottom: 16px; }
+        .limite-item label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+        .limite-valor { font-size: 20px; font-weight: bold; }
         .color-nuevo { color: #9C27B0; }
         .color-alerta1 { color: #E91E63; }
         .color-ultima { color: #F44336; }
@@ -158,6 +127,14 @@
 
     <div class="calculadora-card">
         <h2>Evaluación de Transformadores</h2>
+
+        <div class="modo-contenedor">
+            <span id="lblModoDesc">Método Clásico (Ing. Cuevas)</span>
+            <label class="switch">
+                <input type="checkbox" id="chkModo">
+                <span class="slider"></span>
+            </label>
+        </div>
         
         <div class="input-group">
             <label>Voltaje entre fases (V)</label>
@@ -169,15 +146,11 @@
         </div>
         <div class="input-group">
             <label>Resistencia Medida (M-OHMS)</label>
-            <input type="number" id="inpResistencia" value="50">
+            <input type="number" id="inpResistencia" value="300">
         </div>
         <div class="input-group">
             <label>Temperatura del Transf. (°C)</label>
-            <input type="number" id="inpTemperatura" value="20">
-        </div>
-        <div class="input-group">
-            <label>Índice de Polarización (IP)</label>
-            <input type="number" id="inpIP" placeholder="Opcional">
+            <input type="number" id="inpTemperatura" value="40">
         </div>
 
         <div class="radio-group">
@@ -193,10 +166,6 @@
                 <input type="radio" name="optEval" id="rbCorregidos" value="CORREGIDOS">
                 <label for="rbCorregidos">MEGA-OHMS CORREGIDOS</label>
             </div>
-            <div class="radio-option">
-                <input type="radio" name="optEval" id="rbPolarizacion" value="POLARIZACION">
-                <label for="rbPolarizacion">EVALUAR Ind. polarización</label>
-            </div>
         </div>
 
         <div class="resultados-superiores">
@@ -207,7 +176,7 @@
 
         <div class="divisor"></div>
 
-        <button class="btn-calcular" id="btnCalcularLimites">CALCULAR RESISTENCIAS</button>
+        <button class="btn-calcular" id="btnCalcularLimites">CALCULAR RESISTENCIAS LÍMITE</button>
 
         <div class="limite-item">
             <label>R MÍNIMA transf. NUEVO:</label>
@@ -224,13 +193,11 @@
     </div>
 
     <script>
-        // Objeto que encapsula la ingeniería inversa del Ing. Jorge Cuevas
         const EvaluadorDielectrico = {
             
             calcularLimites: function(voltaje, kva) {
                 const factorBase = 6.113860951 - 0.438856786 * Math.log(voltaje);
                 const raizKva = Math.sqrt(kva);
-
                 return {
                     rMinimaNueva: Math.round((voltaje * Math.pow(4.2, factorBase)) / raizKva),
                     alerta1: Math.round((voltaje * Math.pow(1.2, factorBase)) / raizKva),
@@ -238,132 +205,110 @@
                 };
             },
 
-            calcularFactor: function(temperatura) {
+            // --- MOTOR 1: MÉTODO CLÁSICO (CLON DEL EXE) ---
+            calcularFactorClasico: function(temperatura) {
                 if (temperatura === 20) return 1.0;
                 return 0.3 * Math.pow(1.06189495, temperatura);
             },
 
-            evaluarEstado: function(voltaje, kva, resistencia, temperatura) {
-                const factorTemp = this.calcularFactor(temperatura);
-                const rCorr = resistencia * factorTemp;
-
-                // Cálculo inverso de la Constante C
+            evaluarClasico: function(voltaje, kva, resistencia, temperatura) {
+                const rCorr = resistencia * this.calcularFactorClasico(temperatura);
                 const factorBase = 6.113860951 - 0.438856786 * Math.log(voltaje);
                 const raizKva = Math.sqrt(kva);
-                const baseValue = (rCorr * raizKva) / voltaje;
-                const c = Math.pow(baseValue, 1.0 / factorBase);
+                const c = Math.pow((rCorr * raizKva) / voltaje, 1.0 / factorBase);
 
-                let estado = "";
-                let porcentaje = 0.0;
-                let color = "#000000";
+                let estado = "", porcentaje = 0.0, color = "#000";
 
-                // Umbrales exactos extraídos del P-Code
-                if (c < 0.69) {
-                    estado = "PELIGROSO";
-                    porcentaje = ((c - 0.097) / 0.6) * 100.0;
-                    color = "#D32F2F"; // Rojo
-                } else if (c < 1.49) {
-                    estado = "HÚMEDO";
-                    porcentaje = ((c - 0.69) / 0.8) * 100.0;
-                    color = "#1976D2"; // Azul
-                } else if (c < 2.49) {
-                    estado = "REGULAR";
-                    porcentaje = ((c - 1.49) / 1.0) * 100.0;
-                    color = "#F57C00"; // Naranja
-                } else if (c < 4.49) {
-                    estado = "BUENO";
-                    porcentaje = ((c - 2.49) / 2.0) * 100.0;
-                    color = "#FBC02D"; // Amarillo oscuro
-                } else {
-                    estado = "EXCELENTE";
-                    porcentaje = ((c - 4.49) / 1.0) * 100.0;
+                if (c < 0.69) { estado = "PELIGROSO"; porcentaje = ((c - 0.097) / 0.6) * 100.0; color = "#D32F2F"; } 
+                else if (c < 1.49) { estado = "HÚMEDO"; porcentaje = ((c - 0.69) / 0.8) * 100.0; color = "#1976D2"; } 
+                else if (c < 2.49) { estado = "REGULAR"; porcentaje = ((c - 1.49) / 1.0) * 100.0; color = "#F57C00"; } 
+                else if (c < 4.49) { estado = "BUENO"; porcentaje = ((c - 2.49) / 2.0) * 100.0; color = "#FBC02D"; } 
+                else { estado = "EXCELENTE"; porcentaje = ((c - 4.49) / 1.0) * 100.0; color = "#388E3C"; }
+
+                return { estado, porcentajeStr: Math.max(0, Math.round(porcentaje)) + " %", color, factor: this.calcularFactorClasico(temperatura), rCorr };
+            },
+
+            // --- MOTOR 2: NORMA IEEE 43 ACTUAL ---
+            calcularFactorIEEE: function(temperatura) {
+                // Corrección a base 40°C
+                return Math.pow(0.5, (40 - temperatura) / 10);
+            },
+
+            evaluarIEEE: function(voltaje, resistencia, temperatura) {
+                const factorKt = this.calcularFactorIEEE(temperatura);
+                const rCorr40C = resistencia * factorKt;
+                
+                // IEEE exige mínimo 100 M-OHMS para la mayoría de los equipos > 5000V
+                const limiteIEEE = 100.0; 
+
+                let estado = "", porcentaje = 0.0, color = "#000";
+
+                if (rCorr40C >= limiteIEEE) {
+                    estado = "APROBADO (Estándar IEEE)";
                     color = "#388E3C"; // Verde
+                } else {
+                    estado = "RECHAZADO (Peligro)";
+                    color = "#D32F2F"; // Rojo
                 }
+                
+                porcentaje = (rCorr40C / limiteIEEE) * 100.0;
 
-                // Ajuste para evitar porcentajes negativos
-                const porcentajeFinal = Math.max(0, Math.round(porcentaje));
-
-                return {
-                    estado: estado,
-                    porcentajeStr: porcentajeFinal + " %",
-                    color: color,
-                    rCorregida: rCorr
-                };
+                return { estado, porcentajeStr: Math.min(100, Math.round(porcentaje)) + " % (Índice de Aprobación)", color, factor: factorKt, rCorr: rCorr40C };
             }
         };
 
-        // --- CONTROLADORES DE LA INTERFAZ ---
-
-        // Referencias a los elementos del DOM
-        const inputs = [
-            document.getElementById('inpVoltaje'),
-            document.getElementById('inpKva'),
-            document.getElementById('inpResistencia'),
-            document.getElementById('inpTemperatura')
-        ];
+        // --- CONTROLADORES DE INTERFAZ ---
+        const inputs = [document.getElementById('inpVoltaje'), document.getElementById('inpKva'), document.getElementById('inpResistencia'), document.getElementById('inpTemperatura')];
         const radios = document.querySelectorAll('input[name="optEval"]');
+        const chkModo = document.getElementById('chkModo');
+        const lblModoDesc = document.getElementById('lblModoDesc');
         const caja1 = document.getElementById('cajaRes1');
         const caja2 = document.getElementById('cajaRes2');
-        const btnCalcular = document.getElementById('btnCalcularLimites');
 
-        // Función para actualizar las cajas dinámicas superiores
-        function ejecutarOpcionSuperior() {
+        function actualizarInterfaz() {
             const v = parseFloat(inputs[0].value) || 0;
             const k = parseFloat(inputs[1].value) || 0;
             const r = parseFloat(inputs[2].value) || 0;
             const t = parseFloat(inputs[3].value) || 0;
-
-            const opcionSeleccionada = document.querySelector('input[name="optEval"]:checked').value;
-
-            // Limpiar cajas por defecto
-            caja1.innerText = "";
-            caja2.innerText = "";
-            caja1.style.color = "#000000";
-
-            if (opcionSeleccionada === "FACTOR") {
-                if (t > 0) caja1.innerText = EvaluadorDielectrico.calcularFactor(t).toFixed(5);
             
-            } else if (opcionSeleccionada === "CORREGIDOS") {
-                if (r > 0 && t > 0) {
-                    const rCorr = r * EvaluadorDielectrico.calcularFactor(t);
-                    caja1.innerText = rCorr.toFixed(2) + " M-OHMS";
-                }
-            
-            } else if (opcionSeleccionada === "EVALUACION") {
-                if (v > 0 && k > 0 && r > 0 && t > 0) {
-                    const eval = EvaluadorDielectrico.evaluarEstado(v, k, r, t);
-                    caja1.innerText = eval.estado;
-                    caja1.style.color = eval.color;
-                    caja2.innerText = eval.porcentajeStr;
-                }
-            } else if (opcionSeleccionada === "POLARIZACION") {
-                caja1.innerText = "IP Calculado (En desarrollo)";
+            const opcion = document.querySelector('input[name="optEval"]:checked').value;
+            const esModoIEEE = chkModo.checked;
+
+            lblModoDesc.innerText = esModoIEEE ? "Norma Actual (IEEE 43-2000)" : "Método Clásico (Ing. Cuevas)";
+            lblModoDesc.style.color = esModoIEEE ? "#388E3C" : "#1565c0";
+
+            caja1.innerText = ""; caja2.innerText = ""; caja1.style.color = "#000";
+
+            let resultados;
+            if (esModoIEEE) resultados = EvaluadorDielectrico.evaluarIEEE(v, r, t);
+            else resultados = EvaluadorDielectrico.evaluarClasico(v, k, r, t);
+
+            if (opcion === "FACTOR" && t > 0) {
+                caja1.innerText = resultados.factor.toFixed(5) + (esModoIEEE ? " (Kt Base 40°C)" : " (Base 20°C)");
+            } else if (opcion === "CORREGIDOS" && r > 0 && t > 0) {
+                caja1.innerText = resultados.rCorr.toFixed(2) + " M-OHMS";
+            } else if (opcion === "EVALUACION" && v > 0 && r > 0 && t > 0) {
+                caja1.innerText = resultados.estado;
+                caja1.style.color = resultados.color;
+                caja2.innerText = resultados.porcentajeStr;
             }
         }
 
-        // Función para calcular las alertas inferiores
-        function calcularLimitesInferiores() {
-            const v = parseFloat(inputs[0].value) || 0;
-            const k = parseFloat(inputs[1].value) || 0;
+        inputs.forEach(inp => inp.addEventListener('input', actualizarInterfaz));
+        radios.forEach(radio => radio.addEventListener('change', actualizarInterfaz));
+        chkModo.addEventListener('change', actualizarInterfaz);
 
+        document.getElementById('btnCalcularLimites').addEventListener('click', () => {
+            const v = parseFloat(inputs[0].value) || 0, k = parseFloat(inputs[1].value) || 0;
             if (v > 0 && k > 0) {
                 const limites = EvaluadorDielectrico.calcularLimites(v, k);
                 document.getElementById('resNuevo').innerText = limites.rMinimaNueva + " M-OHMS";
                 document.getElementById('resAlerta1').innerText = limites.alerta1 + " M-OHMS";
                 document.getElementById('resUltima').innerText = limites.ultimaAlerta + " M-OHMS";
-            } else {
-                alert("Por favor, ingresa un Voltaje y Potencia válidos.");
             }
-        }
+        });
 
-        // Asignar Eventos: Se actualiza en tiempo real al escribir o cambiar de bolita
-        inputs.forEach(inp => inp.addEventListener('input', ejecutarOpcionSuperior));
-        radios.forEach(radio => radio.addEventListener('change', ejecutarOpcionSuperior));
-        btnCalcular.addEventListener('click', calcularLimitesInferiores);
-
-        // Ejecutar cálculo inicial al abrir la página
-        ejecutarOpcionSuperior();
-
+        actualizarInterfaz();
     </script>
 </body>
 </html>
