@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Dieléctrica de Transformadores</title>
+    <style>
+        /* --- ESTILOS VISUALES (CSS) --- */
+        :root {
+            --primary-color: #3f51b5;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .calculadora-card {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .input-group input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input[type="number"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        .radio-group {
+            margin: 24px 0;
+            padding: 16px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .radio-option {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .resultados-superiores {
+            margin-bottom: 24px;
+        }
+
+        .caja-resultado {
+            background-color: #e0e0e0;
+            min-height: 44px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .divisor {
+            height: 2px;
+            background-color: var(--border-color);
+            margin: 24px 0;
+        }
+
+        .btn-calcular {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 24px;
+        }
+
+        .btn-calcular:hover {
+            background-color: #303f9f;
+        }
+
+        .limite-item {
+            margin-bottom: 16px;
+        }
+
+        .limite-item label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .limite-valor {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Colores específicos de alertas */
+        .color-nuevo { color: #9C27B0; }
+        .color-alerta1 { color: #E91E63; }
+        .color-ultima { color: #F44336; }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora-card">
+        <h2>Evaluación de Transformadores</h2>
+        
+        <div class="input-group">
+            <label>Voltaje entre fases (V)</label>
+            <input type="number" id="inpVoltaje" value="13200">
+        </div>
+        <div class="input-group">
+            <label>Potencia Eléctrica (KVA)</label>
+            <input type="number" id="inpKva" value="800">
+        </div>
+        <div class="input-group">
+            <label>Resistencia Medida (M-OHMS)</label>
+            <input type="number" id="inpResistencia" value="50">
+        </div>
+        <div class="input-group">
+            <label>Temperatura del Transf. (°C)</label>
+            <input type="number" id="inpTemperatura" value="20">
+        </div>
+        <div class="input-group">
+            <label>Índice de Polarización (IP)</label>
+            <input type="number" id="inpIP" placeholder="Opcional">
+        </div>
+
+        <div class="radio-group">
+            <div class="radio-option">
+                <input type="radio" name="optEval" id="rbEval" value="EVALUACION" checked>
+                <label for="rbEval" style="color: #D32F2F; font-weight: bold;">EVALUACIÓN</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="optEval" id="rbFactor" value="FACTOR">
+                <label for="rbFactor">factor corrección</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="optEval" id="rbCorregidos" value="CORREGIDOS">
+                <label for="rbCorregidos">MEGA-OHMS CORREGIDOS</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="optEval" id="rbPolarizacion" value="POLARIZACION">
+                <label for="rbPolarizacion">EVALUAR Ind. polarización</label>
+            </div>
+        </div>
+
+        <div class="resultados-superiores">
+            <label style="font-weight: bold; margin-bottom: 8px; display: block;">RESULTADOS:</label>
+            <div id="cajaRes1" class="caja-resultado"></div>
+            <div id="cajaRes2" class="caja-resultado"></div>
+        </div>
+
+        <div class="divisor"></div>
+
+        <button class="btn-calcular" id="btnCalcularLimites">CALCULAR RESISTENCIAS</button>
+
+        <div class="limite-item">
+            <label>R MÍNIMA transf. NUEVO:</label>
+            <div id="resNuevo" class="limite-valor color-nuevo">0 M-OHMS</div>
+        </div>
+        <div class="limite-item">
+            <label>1a. ALERTA Transf. en servicio:</label>
+            <div id="resAlerta1" class="limite-valor color-alerta1">0 M-OHMS</div>
+        </div>
+        <div class="limite-item">
+            <label>ÚLTIMA ALERTA trans. en servicio:</label>
+            <div id="resUltima" class="limite-valor color-ultima">0 M-OHMS</div>
+        </div>
+    </div>
+
+    <script>
+        // Objeto que encapsula la ingeniería inversa del Ing. Jorge Cuevas
+        const EvaluadorDielectrico = {
+            
+            calcularLimites: function(voltaje, kva) {
+                const factorBase = 6.113860951 - 0.438856786 * Math.log(voltaje);
+                const raizKva = Math.sqrt(kva);
+
+                return {
+                    rMinimaNueva: Math.round((voltaje * Math.pow(4.2, factorBase)) / raizKva),
+                    alerta1: Math.round((voltaje * Math.pow(1.2, factorBase)) / raizKva),
+                    ultimaAlerta: Math.round((voltaje * Math.pow(0.5, factorBase)) / raizKva)
+                };
+            },
+
+            calcularFactor: function(temperatura) {
+                if (temperatura === 20) return 1.0;
+                return 0.3 * Math.pow(1.06189495, temperatura);
+            },
+
+            evaluarEstado: function(voltaje, kva, resistencia, temperatura) {
+                const factorTemp = this.calcularFactor(temperatura);
+                const rCorr = resistencia * factorTemp;
+
+                // Cálculo inverso de la Constante C
+                const factorBase = 6.113860951 - 0.438856786 * Math.log(voltaje);
+                const raizKva = Math.sqrt(kva);
+                const baseValue = (rCorr * raizKva) / voltaje;
+                const c = Math.pow(baseValue, 1.0 / factorBase);
+
+                let estado = "";
+                let porcentaje = 0.0;
+                let color = "#000000";
+
+                // Umbrales exactos extraídos del P-Code
+                if (c < 0.69) {
+                    estado = "PELIGROSO";
+                    porcentaje = ((c - 0.097) / 0.6) * 100.0;
+                    color = "#D32F2F"; // Rojo
+                } else if (c < 1.49) {
+                    estado = "HÚMEDO";
+                    porcentaje = ((c - 0.69) / 0.8) * 100.0;
+                    color = "#1976D2"; // Azul
+                } else if (c < 2.49) {
+                    estado = "REGULAR";
+                    porcentaje = ((c - 1.49) / 1.0) * 100.0;
+                    color = "#F57C00"; // Naranja
+                } else if (c < 4.49) {
+                    estado = "BUENO";
+                    porcentaje = ((c - 2.49) / 2.0) * 100.0;
+                    color = "#FBC02D"; // Amarillo oscuro
+                } else {
+                    estado = "EXCELENTE";
+                    porcentaje = ((c - 4.49) / 1.0) * 100.0;
+                    color = "#388E3C"; // Verde
+                }
+
+                // Ajuste para evitar porcentajes negativos
+                const porcentajeFinal = Math.max(0, Math.round(porcentaje));
+
+                return {
+                    estado: estado,
+                    porcentajeStr: porcentajeFinal + " %",
+                    color: color,
+                    rCorregida: rCorr
+                };
+            }
+        };
+
+        // --- CONTROLADORES DE LA INTERFAZ ---
+
+        // Referencias a los elementos del DOM
+        const inputs = [
+            document.getElementById('inpVoltaje'),
+            document.getElementById('inpKva'),
+            document.getElementById('inpResistencia'),
+            document.getElementById('inpTemperatura')
+        ];
+        const radios = document.querySelectorAll('input[name="optEval"]');
+        const caja1 = document.getElementById('cajaRes1');
+        const caja2 = document.getElementById('cajaRes2');
+        const btnCalcular = document.getElementById('btnCalcularLimites');
+
+        // Función para actualizar las cajas dinámicas superiores
+        function ejecutarOpcionSuperior() {
+            const v = parseFloat(inputs[0].value) || 0;
+            const k = parseFloat(inputs[1].value) || 0;
+            const r = parseFloat(inputs[2].value) || 0;
+            const t = parseFloat(inputs[3].value) || 0;
+
+            const opcionSeleccionada = document.querySelector('input[name="optEval"]:checked').value;
+
+            // Limpiar cajas por defecto
+            caja1.innerText = "";
+            caja2.innerText = "";
+            caja1.style.color = "#000000";
+
+            if (opcionSeleccionada === "FACTOR") {
+                if (t > 0) caja1.innerText = EvaluadorDielectrico.calcularFactor(t).toFixed(5);
+            
+            } else if (opcionSeleccionada === "CORREGIDOS") {
+                if (r > 0 && t > 0) {
+                    const rCorr = r * EvaluadorDielectrico.calcularFactor(t);
+                    caja1.innerText = rCorr.toFixed(2) + " M-OHMS";
+                }
+            
+            } else if (opcionSeleccionada === "EVALUACION") {
+                if (v > 0 && k > 0 && r > 0 && t > 0) {
+                    const eval = EvaluadorDielectrico.evaluarEstado(v, k, r, t);
+                    caja1.innerText = eval.estado;
+                    caja1.style.color = eval.color;
+                    caja2.innerText = eval.porcentajeStr;
+                }
+            } else if (opcionSeleccionada === "POLARIZACION") {
+                caja1.innerText = "IP Calculado (En desarrollo)";
+            }
+        }
+
+        // Función para calcular las alertas inferiores
+        function calcularLimitesInferiores() {
+            const v = parseFloat(inputs[0].value) || 0;
+            const k = parseFloat(inputs[1].value) || 0;
+
+            if (v > 0 && k > 0) {
+                const limites = EvaluadorDielectrico.calcularLimites(v, k);
+                document.getElementById('resNuevo').innerText = limites.rMinimaNueva + " M-OHMS";
+                document.getElementById('resAlerta1').innerText = limites.alerta1 + " M-OHMS";
+                document.getElementById('resUltima').innerText = limites.ultimaAlerta + " M-OHMS";
+            } else {
+                alert("Por favor, ingresa un Voltaje y Potencia válidos.");
+            }
+        }
+
+        // Asignar Eventos: Se actualiza en tiempo real al escribir o cambiar de bolita
+        inputs.forEach(inp => inp.addEventListener('input', ejecutarOpcionSuperior));
+        radios.forEach(radio => radio.addEventListener('change', ejecutarOpcionSuperior));
+        btnCalcular.addEventListener('click', calcularLimitesInferiores);
+
+        // Ejecutar cálculo inicial al abrir la página
+        ejecutarOpcionSuperior();
+
+    </script>
+</body>
+</html>
